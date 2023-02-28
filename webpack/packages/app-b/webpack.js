@@ -31,6 +31,7 @@ module.exports = {
       template: "./index.html",
     }),
     new FederatedTypesPlugin({
+      disableDownloadingRemoteTypes: true,
       federationConfig: {
         name: "app_b",
         filename: "remoteEntry.js",
