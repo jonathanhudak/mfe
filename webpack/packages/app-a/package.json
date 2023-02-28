@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --config webpack.js --watch",
     "serve": "serve dist -p 3001",
-    "dev:start": "npm-run-all --parallel dev serve"
+    "dev:start": "mkdir -p node_modules && npm-run-all --parallel dev serve"
   },
   "keywords": [],
   "author": "",

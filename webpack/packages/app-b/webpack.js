@@ -1,11 +1,10 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-
+const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const deps = require("../../package.json").dependencies;
 
 module.exports = {
-  entry: "./index.tsx",
+  entry: "./index.ts",
   mode: "development",
   devtool: "inline-source-map",
   module: {
@@ -21,7 +20,7 @@ module.exports = {
     publicPath: "http://localhost:3002/",
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".tsx", ".ts", ".js", ".jsx"],
   },
   output: {
     filename: "bundle.js",
@@ -31,22 +30,24 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./index.html",
     }),
-    new ModuleFederationPlugin({
-      name: "app-b",
-      filename: "remoteEntry.js",
-      remotes: {
-        "app-a": "app-a@http://localhost:3001/remoteEntry.js",
-      },
-      exposes: {},
-      shared: {
-        ...deps,
-        react: {
-          singleton: true,
-          requiredVersion: deps.react,
+    new FederatedTypesPlugin({
+      federationConfig: {
+        name: "app_b",
+        filename: "remoteEntry.js",
+        remotes: {
+          app_a: "app_a@http://localhost:3001/remoteEntry.js",
         },
-        "react-dom": {
-          singleton: true,
-          requiredVersion: deps["react-dom"],
+        exposes: {},
+        shared: {
+          ...deps,
+          react: {
+            singleton: true,
+            requiredVersion: deps.react,
+          },
+          "react-dom": {
+            singleton: true,
+            requiredVersion: deps["react-dom"],
+          },
         },
       },
     }),

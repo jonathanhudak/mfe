@@ -1,11 +1,10 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-
+const { FederatedTypesPlugin } = require("@module-federation/typescript");
 const deps = require("../../package.json").dependencies;
 
 module.exports = {
-  entry: "./index.tsx",
+  entry: "./index.ts",
   mode: "development",
   devtool: "inline-source-map",
   module: {
@@ -31,21 +30,23 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./index.html",
     }),
-    new ModuleFederationPlugin({
-      name: "app-a",
-      filename: "remoteEntry.js",
-      exposes: {
-        "./Button": "./src/Button",
-      },
-      shared: {
-        ...deps,
-        react: {
-          singleton: true,
-          requiredVersion: deps.react,
+    new FederatedTypesPlugin({
+      federationConfig: {
+        name: "app_a",
+        filename: "remoteEntry.js",
+        exposes: {
+          "./Button": "./Button",
         },
-        "react-dom": {
-          singleton: true,
-          requiredVersion: deps["react-dom"],
+        shared: {
+          ...deps,
+          react: {
+            singleton: true,
+            requiredVersion: deps.react,
+          },
+          "react-dom": {
+            singleton: true,
+            requiredVersion: deps["react-dom"],
+          },
         },
       },
     }),
