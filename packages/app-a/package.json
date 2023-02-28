@@ -1,0 +1,12 @@
+{
+  "name": "app-a",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "esbuild app.tsx --outfile=app.js --bundle --watch --sourcemap"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
